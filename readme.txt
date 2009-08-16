@@ -42,5 +42,8 @@ n/a
 
 == Changelog ==
 
+= 1.0.1 =
+* Corrected deprecated parameter variable 'siteurl' to 'url'
+
 = 1.0 =
 * Initial Release
