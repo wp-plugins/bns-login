@@ -40,7 +40,8 @@ Yes, the plugin text is wrapped in its own `<div id="bns-logged-in" class="bns-l
 
 == Screenshots ==
 
-n/a
+1. Logged in text.
+2. Logged out text.
 
 == Changelog ==
 
