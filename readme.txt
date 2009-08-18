@@ -45,6 +45,9 @@ Yes, the plugin text is wrapped in its own `<div id="bns-logged-in" class="bns-l
 
 == Changelog ==
 
+= 1.2 =
+* Added localization code
+
 = 1.1 =
 * Added WordPressMU Compatibility - Logout returns user to main domain (home) of WPMU installation.
 * Corrected deprecated parameter variable 'siteurl' to 'url'
