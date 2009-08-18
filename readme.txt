@@ -1,7 +1,7 @@
 === BNS Login ===
 Contributors: cais
 Donate link: http://buynowshop.com/
-Tags: login, dashboard
+Tags: login, dashboard, admin
 Requires at least: 2.7.0
 Tested up to: 2.8.4
 Stable tag: 1.1
@@ -34,7 +34,7 @@ Additonal WordPress MU compatibility added at version 1.1 - When a user logs out
 
 Yes, it really is.
 
-= Can the plugin be styled ? =
+= Can the plugin be styled? =
 
 Yes, the plugin text is wrapped in its own `<div id="bns-logged-in" class="bns-login">` or `<div id="bns-logged-out" class="bns-login">` depending on the login status of the user. Just add your preferred properties to the end of your style.css file.
 
