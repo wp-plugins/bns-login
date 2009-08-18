@@ -9,6 +9,9 @@ Author: Edward "cais" Caissie
 Author URI: http://edwardcaissie.com/
 */
 
+$plugin_dir = basename(dirname(__FILE__));
+load_plugin_textdomain( 'bns-login', 'wp-content/plugins/' . $plugin_dir, $plugin_dir );
+
 function bns_addlogin() {
   $login_url = get_bloginfo('url') . '/wp-admin/';
   if ( is_user_logged_in() ) {
