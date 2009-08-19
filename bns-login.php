@@ -6,6 +6,7 @@ Description: A simple plugin providing a link to the dashboard; and, a method to
 Version: 1.2
 Author: Edward "cais" Caissie
 Author URI: http://edwardcaissie.com/
+Text Domain: bns-login
 */
 
 $plugin_dir = basename(dirname(__FILE__));
