@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: BNS Login
-Plugin URI: http://buynowshop.com/
+Plugin URI: http://buynowshop.com/plugins/bns-login/
 Description: A simple plugin providing a link to the dashboard; and, a method to log in and out of your blog in the footer of the theme. This is ideal for those not wanting to use the meta widget/code links. 
-Version: 1.3
+Version: 1.2
 Author: Edward "cais" Caissie
 Author URI: http://edwardcaissie.com/
 Text Domain: bns-login
