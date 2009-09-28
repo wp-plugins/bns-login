@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: login, dashboard, admin
 Requires at least: 2.7.0
 Tested up to: 2.8.4
-Stable tag: 1.2
+Stable tag: 1.3
 
 A plugin providing a link to the dashboard; and, a log in and out link.
 
@@ -44,6 +44,12 @@ Yes, the plugin text is wrapped in its own `<div id="bns-logged-in" class="bns-l
 2. Logged out text.
 
 == Changelog ==
+
+= 1.3 =
+* Code clean up
+* Comments and documentation added
+* Version control added
+* localization code init function
 
 = 1.2 =
 * Added localization code
