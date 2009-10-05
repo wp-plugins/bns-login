@@ -3,7 +3,7 @@
 Plugin Name: BNS Login
 Plugin URI: http://buynowshop.com/plugins/bns-login/
 Description: A simple plugin providing a link to the dashboard; and, a method to log in and out of your blog in the footer of the theme. This is ideal for those not wanting to use the meta widget/code links. 
-Version: 1.3.1
+Version: 1.3.2
 Author: Edward "cais" Caissie
 Author URI: http://edwardcaissie.com/
 Text Domain: bns-login
@@ -16,7 +16,7 @@ function bns_login_init() {
 	}
 	
 global $wp_version;
-$exit_msg='BNS Login requries a minimum of WordPress 2.7, <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!"</a>';
+$exit_msg='BNS Login requries a minimum of WordPress 2.7, <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>';
 if (version_compare($wp_version, "2.7", "<"))
 	{
 		exit ($exit_msg);
