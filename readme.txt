@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: login, dashboard, admin
 Requires at least: 2.7.0
 Tested up to: 2.9.1
-Stable tag: 1.3.3
+Stable tag: 1.3.3.1
 
 A plugin providing a link to the dashboard; and, a log in and out link.
 
@@ -39,11 +39,24 @@ Yes, it really is.
 Yes, the plugin text is wrapped in its own `<div id="bns-logged-in" class="bns-login">` or `<div id="bns-logged-out" class="bns-login">` depending on the login status of the user. Just add your preferred properties to the end of your style.css file.
 
 == Screenshots ==
-
 1. Logged in text.
 2. Logged out text.
 
+== Other Notes ==
+* Copyright 2009, 2010 Edward Caissie 
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version.
+ 
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ 
+You should have received a copy of the GNU General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+== Upgrade Notice ==
+Please stay current with your WordPress installation, your active theme, and your plugins.
+
 == Changelog ==
+= 1.3.3.1 =
+* clarified the plugin's release under a GPL license
 
 = 1.3.3 =
 * compatibility check for 2.9.1 completed
