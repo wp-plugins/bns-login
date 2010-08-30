@@ -3,8 +3,8 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: login, dashboard, admin, footer
 Requires at least: 2.7
-Tested up to: 3.0
-Stable tag: 1.5
+Tested up to: 3.0.1
+Stable tag: 1.5.1
 
 A plugin providing a link to the dashboard; and, a log in and out link.
 
@@ -69,8 +69,12 @@ Yes, the plugin text is wrapped in its own `<div id="bns-logged-in" class="bns-l
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.5.1 =
+* released: 29 Aug 2010
+* compatibility check with WordPress 3.0.1
+* no other modifications
+
 = 1.5 =
-* released: ...
 * minor code corrections
 * code clean up to meet WP Standards
 
