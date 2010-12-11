@@ -21,7 +21,10 @@
   http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-.bns-login {text-align:center;} /* Centers the text as a default */
+.bns-login {
+  clear: both;
+  text-align: center; /* Centers the text as a default */
+} 
 
 div#bns-logged-in {}
 div#bns-logged-in a {}
