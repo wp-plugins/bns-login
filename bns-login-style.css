@@ -1,6 +1,6 @@
 /* This file is part of BNS Login
 
-  Copyright 2009-2010  Edward Caissie  (email : edward.caissie@gmail.com)
+  Copyright 2009-2011  Edward Caissie  (email : edward.caissie@gmail.com)
 
   BNS Login is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License version 2,
@@ -21,10 +21,19 @@
   http://www.gnu.org/licenses/gpl-2.0.html
 */
 
-.bns-login {text-align:center;} /* Centers the text as a default */
+/** Copy and paste below basic style elements into `bns-login-custom-style.css`
+  * To maintain your custom styles through future updates make all of your edits
+  * to the "custom" stylesheets as those made in this one will be over-written.  
+  */
+  
+.bns-login {
+  clear: both;
+  text-align: center; /* Centers the text as a default */
+} 
 
 div#bns-logged-in {}
 div#bns-logged-in a {}
 
 div#bns-logged-out {}
 div#bns-logged-out a {}
+/* Last revised June 4, 2011 version 1.6 */
