@@ -4,7 +4,7 @@ Donate link: http://buynowshop.com/
 Tags: login, dashboard, admin, footer
 Requires at least: 3.0
 Tested up to: 3.2
-Stable tag: 1.6
+Stable tag: 1.7
 
 A plugin providing a link to the dashboard; and, a log in and out link.
 
@@ -68,11 +68,19 @@ Copy the contents of the included `bns-login-style.css` file (which contains a f
   http://www.gnu.org/licenses/gpl-2.0.html
 
 
-
 == Upgrade Notice ==
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.7 =
+* released June 2011
+* confirmed compatible with WordPress version 3.2-RC1
+* minor changes to front-facing text
+* allow editable parameters for the text
+* added editable separator character(s)
+* separator character(s) has its own style class, `bns-login-separator`
+* added 'Register' link if the site allows for user self-registration; thanks to Andy Fragen for the idea.
+
 = 1.6 =
 * released June 2011
 * confirmed compatible with WordPress version 3.2-beta2-18085
