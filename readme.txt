@@ -3,16 +3,16 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: login, dashboard, admin, footer
 Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: 1.7
+Tested up to: 3.3
+Stable tag: 1.8
 
-A plugin providing a link to the dashboard; and, a log in and out link.
+This plugin provides a link, in the theme footer area, to the dashboard when logged in as well as a log out link.
 
 == Description ==
 
 A simple plugin providing a link to the dashboard; and, a method to log in and out of your blog in the footer of the theme. This is ideal for those not wanting to use the meta widget/code links.
 
-Additonal WordPress (MU) Multisite compatibility added at version 1.1 - When a user logs out via the plugin they will be returned to the WordPress (MU) Multisite main domain home page.
+Additional WordPress (MU) Multisite compatibility added at version 1.1 - When a user logs out via the plugin they will be returned to the WordPress (MU) Multisite main domain home page.
 
 == Installation ==
 
@@ -28,7 +28,7 @@ Additonal WordPress (MU) Multisite compatibility added at version 1.1 - When a u
 4. Install.
 5. Activate through the 'Plugins' menu
 
-Reading this article for further assistance: http://wpfirstaid.com/2009/12/plugin-installation/
+Read this article for further assistance: http://wpfirstaid.com/2009/12/plugin-installation/
 
 == Frequently Asked Questions ==
 = How can I get support for this plugin? =
@@ -72,6 +72,15 @@ Copy the contents of the included `bns-login-style.css` file (which contains a f
 Please stay current with your WordPress installation, your active theme, and your plugins.
 
 == Changelog ==
+= 1.8 =
+* released November 2011
+* confirmed compatible with WordPress 3.3
+* added phpDoc Style documentation
+* added conditional check for custom stylesheet
+* cleaned up use of `wp_register`
+* general code tidying
+* wrap `BNS_Login` and `Add_BNS_Login` in `function_exists` conditionals
+
 = 1.7 =
 * released June 2011
 * confirmed compatible with WordPress version 3.2-RC1
@@ -89,7 +98,7 @@ Please stay current with your WordPress installation, your active theme, and you
 
 = 1.5.3 =
 * released December 11, 2010
-* Confirm comaptible with WordPress 3.1 (beta)
+* Confirm compatible with WordPress 3.1 (beta)
 
 = 1.5.2 =
 * added 'clear:both;' to '.bns-login'
@@ -113,7 +122,7 @@ Please stay current with your WordPress installation, your active theme, and you
 * updated license declaration
 
 = 1.3.3.1 =
-* clarified the plugin's release under a GPL license
+* clarified the plugin release under a GPL license
 
 = 1.3.3 =
 * compatibility check for 2.9.1 completed
