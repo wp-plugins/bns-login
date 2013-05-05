@@ -3,7 +3,7 @@
 Plugin Name: BNS Login
 Plugin URI: http://buynowshop.com/plugins/bns-login/
 Description: A simple plugin providing a link to the dashboard; and, a method to log in and out of your blog in the footer of the theme. This is ideal for those not wanting to use the meta widget/code links.
-Version: 2.0.1
+Version: 2.1
 Text Domain: bns-login
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -21,7 +21,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-login/
  * @link        https://github.com/Cais/bns-login/
  * @link        http://wordpress.org/extend/plugins/bns-login/
- * @version     2.0.1
+ * @version     2.1
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2013, Edward Caissie
  *
@@ -50,6 +50,10 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * Documentation updates (copyright year, compatibility version)
  * Added code block termination comments
  * Changed MultiSite conditional to use `is_multisite`
+ *
+ * @version 2.1
+ * @date    May 2, 2013
+ * Added `bns_login_form` for use with 'bns_login' shortcode
  */
 
 class BNS_Login {
@@ -81,7 +85,8 @@ class BNS_Login {
         /** Add Shortcode functionality to text widgets */
         add_action( 'widget_text', 'do_shortcode' );
         /** Add Shortcode for this plugin */
-        add_shortcode( 'bns_login', array( $this, 'bns_login_main' ) );
+        // add_shortcode( 'bns_login', array( $this, 'bns_login_main' ) );
+        add_shortcode( 'bns_login', array( $this, 'bns_login_form' ) );
 
     } /** End function - construct */
 
@@ -89,7 +94,8 @@ class BNS_Login {
     /**
      * Enqueue Plugin Scripts and Styles
      *
-     * Adds plugin stylesheet and allows for custom stylesheet to be added by end-user.
+     * Adds plugin stylesheet and allows for custom stylesheet to be added by
+     * end-user.
      *
      * @package BNS_Login
      * @since   1.6
@@ -100,14 +106,26 @@ class BNS_Login {
      *
      * @version 1.8
      * Add conditional check for custom stylesheet
+     *
+     * @version 2.1
+     * @date    May 2, 2013
+     * Added plugin version data dynamically to enqueue calls
+     * Added (enqueued) 'BNS Login Form Style' to style the form
      */
     function Scripts_and_Styles() {
-        /* Enqueue Scripts */
+        /** Call the wp-admin plugin code */
+        require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+        /** @var $bnsfc_data - holds the plugin header data */
+        $bns_login_data = get_plugin_data( __FILE__ );
+
         /* Enqueue Styles */
-        wp_enqueue_style( 'BNS-Login-Style', plugin_dir_url( __FILE__ ) . 'bns-login-style.css', array(), '1.8', 'screen' );
+        wp_enqueue_style( 'BNS-Login-Style', plugin_dir_url( __FILE__ ) . 'bns-login-style.css', array(), $bns_login_data['Version'], 'screen' );
+        wp_enqueue_style( 'BNS-Login-Form-Style', plugin_dir_url( __FILE__ ) . 'bns-login-form-style.css', array(), $bns_login_data['Version'], 'screen' );
+        /** Add custom styles */
         if ( is_readable( plugin_dir_path( __FILE__ ) . 'bns-login-custom-style.css' ) ) {
-            wp_enqueue_style( 'BNS-Login-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-login-custom-style.css', array(), '1.8', 'screen' );
+            wp_enqueue_style( 'BNS-Login-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-login-custom-style.css', array(), $bns_login_data['Version'], 'screen' );
         } /** End if - is readable */
+
     } /** End function - scripts and styles */
 
 
@@ -212,6 +230,54 @@ class BNS_Login {
         do_action( 'bns_login_after_output' );
 
     } /** End function - bns login output */
+
+
+    /**
+     * BNS Login Form
+     * Borrowed from the core login form and used with the shortcode 'bns_login'
+     * This allows for the 'bns_login' shortcode to accept all of the parameters
+     * of the `wp_login_form` function as the shortcode attributes.
+     *
+     * @package BNS_Login
+     * @since   2.1
+     *
+     * @param   $args
+     *
+     * @internal $defaults copied from codex '$args' entry
+     * @link    http://codex.wordpress.org/Function_Reference/wp_login_form
+     *
+     * @uses    __
+     * @uses    shortcode_atts
+     * @uses    site_url
+     * @uses    wp_login_form
+     * @uses    wp_parse_args
+     *
+     * @return  string - the login form
+     */
+    function bns_login_form( $args ) {
+
+        $defaults = shortcode_atts( array(
+            'echo'              => false,
+            'redirect'          => site_url( $_SERVER['REQUEST_URI'] ),
+            'form_id'           => 'loginform',
+            'label_username'    => __( 'Username', 'bns-login' ),
+            'label_password'    => __( 'Password', 'bns-login' ),
+            'label_remember'    => __( 'Remember Me', 'bns-login' ),
+            'label_log_in'      => __( 'Log In', 'bns-login' ),
+            'id_username'       => 'user_login',
+            'id_password'       => 'user_pass',
+            'id_remember'       => 'rememberme',
+            'id_submit'         => 'wp-submit',
+            'remember'          => true,
+            'value_username'    => NULL,
+            'value_remember'    => false
+        ), $args );
+
+        $login_args = wp_parse_args( $args, $defaults );
+
+        return wp_login_form( $login_args );
+
+    } /** End function - bns login form */
 
 
 } /** End class - BNS Login */
