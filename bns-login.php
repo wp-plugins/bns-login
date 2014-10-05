@@ -3,7 +3,7 @@
 Plugin Name: BNS Login
 Plugin URI: http://buynowshop.com/plugins/bns-login/
 Description: A simple plugin providing a link to the dashboard; and, a method to log in and out of your blog in the footer of the theme. This is ideal for those not wanting to use the meta widget/code links.
-Version: 2.3.3
+Version: 2.4
 Text Domain: bns-login
 Author: Edward Caissie
 Author URI: http://edwardcaissie.com/
@@ -21,7 +21,7 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * @link        http://buynowshop.com/plugins/bns-login/
  * @link        https://github.com/Cais/bns-login/
  * @link        http://wordpress.org/extend/plugins/bns-login/
- * @version     2.3.3
+ * @version     2.4
  * @author      Edward Caissie <edward.caissie@gmail.com>
  * @copyright   Copyright (c) 2009-2014, Edward Caissie
  *
@@ -45,21 +45,16 @@ License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * The license for this software can also likely be found here:
  * http://www.gnu.org/licenses/gpl-2.0.html
  *
- * @version     2.3
- * @date        August 2013
- * Added Jetpack Infinite Scroll compatibility
- *
- * @version     2.3.1
- * @date        August 2013
- * Added docs to and enhanced Jetpack Infinite Scroll Compatibility function
- *
  * @version     2.3.2
  * @date        December 2013
  * Add the option to put custom stylesheet in `/wp-content/` folder
  *
- * @version	2.3.3
- * @date	March 2014
+ * @version     2.3.3
+ * @date        March 2014
  * Inline documentation, version compatibility, and copyright years updated
+ *
+ * @version     2.4
+ * @date        October 2014
  */
 class BNS_Login {
 	/**
@@ -68,20 +63,25 @@ class BNS_Login {
 	 * @package          BNS_Login
 	 * @since            1.9
 	 *
-	 * @uses    (global) wp_version
+	 * @uses             (global) wp_version
 	 * @uses             add_action
 	 * @uses             add_shortcode
 	 *
-	 * @version	2.3.3
-	 * @date	March 29, 2014
+	 * @version          2.3.3
+	 * @date             March 29, 2014
 	 * Updated required WordPress version to 3.6
+	 *
+	 * @version          2.4
+	 * @date             October 4, 2014
+	 * Updated required version check to 3.8 for `dashicons` inclusion
+	 * Defined `BNS_CUSTOM_PATH` and `BNS_CUSTOM_URL` for customizations
 	 */
 	function __construct() {
 		/** Check installed WordPress version for compatibility */
 		global $wp_version;
-		$exit_ver_msg = __( 'BNS Login requires a minimum of WordPress 3.6, <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-login' );
-		/** Version 3.6 is used for `shortcode_atts` optional filter parameter */
-		if ( version_compare( $wp_version, "3.6", "<" ) ) {
+		$exit_ver_msg = __( 'BNS Login requires a minimum of WordPress 3.8, <a href="http://codex.wordpress.org/Upgrading_WordPress">Please Update!</a>', 'bns-login' );
+		/** Version 3.8 is required for `dashicons` inclusion */
+		if ( version_compare( $wp_version, "3.8", "<" ) ) {
 			exit ( $exit_ver_msg );
 		}
 		/** End if - version compare */
@@ -90,12 +90,14 @@ class BNS_Login {
 		add_action(
 			'wp_enqueue_scripts', array(
 				$this,
-				'Scripts_and_Styles'
+				'scripts_and_styles'
 			)
 		);
 
 		/** Add BNS Login to Footer */
 		add_action( 'wp_footer', array( $this, 'bns_login_output' ) );
+
+		/** Add Jetpack compatibility for infinite scroll */
 		add_filter(
 			'infinite_scroll_credit', array(
 				$this,
@@ -117,7 +119,18 @@ class BNS_Login {
 			), 10, 2
 		);
 
-	} /** End function - construct */
+		/** Define location for BNS plugin customizations */
+		if ( ! defined( 'BNS_CUSTOM_PATH' ) ) {
+			define( 'BNS_CUSTOM_PATH', WP_CONTENT_DIR . '/bns-customs/' );
+		}
+		/** end if - not defined */
+		if ( ! defined( 'BNS_CUSTOM_URL' ) ) {
+			define( 'BNS_CUSTOM_URL', content_url( '/bns-customs/' ) );
+		}
+		/** end if - not defined */
+
+	}
+	/** End function - construct */
 
 
 	/**
@@ -126,81 +139,101 @@ class BNS_Login {
 	 * Adds plugin stylesheet and allows for custom stylesheet to be added by
 	 * end-user.
 	 *
-	 * @package BNS_Login
-	 * @since   1.6
+	 * @package    BNS_Login
+	 * @since      1.6
 	 *
-	 * @uses	BNS_Login::plugin_data
-	 * @uses    plugin_dir_path
-	 * @uses    plugin_dir_url
-	 * @uses    wp_enqueue_style
+	 * @uses       BNS_Login::plugin_data
+	 * @uses       plugin_dir_path
+	 * @uses       plugin_dir_url
+	 * @uses       wp_enqueue_style
 	 *
-	 * @version 1.8
+	 * @version    1.8
 	 * Add conditional check for custom stylesheet
 	 *
-	 * @version 2.1
-	 * @date    May 2, 2013
+	 * @version    2.1
+	 * @date       May 2, 2013
 	 * Added plugin version data dynamically to enqueue calls
 	 * Added (enqueued) 'BNS Login Form Style' to style the form
 	 *
-	 * @version	2.3.3
-	 * @date	March 29, 2014
+	 * @version    2.3.3
+	 * @date       March 29, 2014
 	 * Extracted `plugin_data` into its own method
+	 *
+	 * @version    2.4
+	 * @date       October 4, 2014
+	 * Added `dashicons` dependency to main style sheet providing access to the icons
+	 * Implement the use of `../wp-content/bns-customs/` for customizations
 	 */
-	function Scripts_and_Styles() {
+	function scripts_and_styles() {
 
 		$bns_login_data = $this->plugin_data();
 
 		/* Enqueue Styles */
-		wp_enqueue_style( 'BNS-Login-Style', plugin_dir_url( __FILE__ ) . 'bns-login-style.css', array(), $bns_login_data['Version'], 'screen' );
+		wp_enqueue_style( 'BNS-Login-Style', plugin_dir_url( __FILE__ ) . 'bns-login-style.css', array( 'dashicons' ), $bns_login_data['Version'], 'screen' );
 		wp_enqueue_style( 'BNS-Login-Form-Style', plugin_dir_url( __FILE__ ) . 'bns-login-form-style.css', array(), $bns_login_data['Version'], 'screen' );
 
 		/**
 		 * Add custom styles
-		 * NB: This location will be killed when plugin is updated due to core
-		 * WordPress functionality - place the custom stylesheet directly in
-		 * the /wp-content/ folder for future proofing your custom styles.
+		 * NB: This location will be over-written when the plugin is updated due
+		 * to core WordPress functionality. Please place your custom stylesheet
+		 * in the /wp-content/bns-customs/ folder (you may need to created this
+		 * via this FTP) to better future proof your customizations.
+		 * @Deprecated  2.4
 		 */
 		if ( is_readable( plugin_dir_path( __FILE__ ) . 'bns-login-custom-style.css' ) ) {
 			wp_enqueue_style( 'BNS-Login-Custom-Style', plugin_dir_url( __FILE__ ) . 'bns-login-custom-style.css', array(), $bns_login_data['Version'], 'screen' );
 		}
 		/** End if - is readable */
 
-		/** For placing the custom stylesheet in the /wp-content/ folder */
-		/** @todo Find alternative to using WP_CONTENT_DIR constant? */
-		if ( is_readable( WP_CONTENT_DIR . '/bns-login-custom-style.css' ) ) {
-			wp_enqueue_style( 'BNS-Login-Custom-Style', content_url() . '/bns-login-custom-style.css', array(), $bns_login_data['Version'], 'screen' );
+		/** Read the custom stylesheet from ../wp-content/bns-customs/ */
+		if ( is_readable( BNS_CUSTOM_PATH . 'bns-login-custom-style.css' ) ) {
+			wp_enqueue_style( 'BNS-Login-Custom-Style', BNS_CUSTOM_URL . 'bns-login-custom-style.css', array(), $bns_login_data['Version'], 'screen' );
 		}
 		/** End if - is readable */
 
-	} /** End function - scripts and styles */
+	}
+	/** End function - scripts and styles */
 
 
 	/**
 	 * BNS Login Main
 	 * Main function that will accept parameters
 	 *
-	 * @package BNS_Login
-	 * @since   0.1
+	 * @package     BNS_Login
+	 * @since       0.1
 	 *
-	 * @uses    apply_filters
-	 * @uses    get_current_site
-	 * @uses    home_url
-	 * @uses    is_multisite
-	 * @uses    is_user_logged_in
-	 * @uses    wp_logout_url
-	 * @uses    wp_parse_args
-	 * @uses    wp_register
+	 * @uses        add_filter
+	 * @uses        apply_filters
+	 * @uses        esc_attr
+	 * @uses        esc_html
+	 * @uses        esc_url
+	 * @uses        get_current_site
+	 * @uses        home_url
+	 * @uses        is_multisite
+	 * @uses        is_ssl
+	 * @uses        is_user_logged_in
+	 * @uses        wp_logout_url
+	 * @uses        wp_parse_args
+	 * @uses        wp_register
+	 *
+	 * @internal    Opus Primus (v1.3+) contains code to activate Dashicons
 	 *
 	 * @return  mixed|string|void
 	 *
-	 * @version 2.0
-	 * @date    November 19, 2012
+	 * @version     2.0
+	 * @date        November 19, 2012
 	 * Add wrapping classes around output elements
 	 * Refactored to use filters instead of array elements
 	 *
-	 * @version 2.0.1
-	 * @date    February 2, 2013
+	 * @version     2.0.1
+	 * @date        February 2, 2013
 	 * Changed Multisite conditional to use `is_multisite`
+	 *
+	 * @version     2.4
+	 * @date        October 5, 2014
+	 * Added filter toggle to use `dashicons` instead of text
+	 * Added some basic sanitization to URL components and structures
+	 * Added `is_ssl()` to detect correct protocol for logout return URL
 	 */
 	function bns_login_main() {
 		/** Initialize $output - start with an empty string */
@@ -213,36 +246,60 @@ class BNS_Login {
 		 * @var $goto           string - anchor text linking to "Dashboard"
 		 * @var $separator      string - characters used to separate link/message texts
 		 * @var $sep            string - $separator wrapper for styling purposes, etc. - just in case ...
+		 *
+		 * @internal *_title is used to preserve the default text strings if dashicons are used
 		 */
-		$login       = apply_filters( 'bns_login_here', sprintf( __( 'Log in here!', 'bns-login' ) ) );
-		$after_login = apply_filters( 'bns_login_after_login', sprintf( __( 'You are logged in!', 'bns-login' ) ) );
-		$logout      = apply_filters( 'bns_login_logout', sprintf( __( 'Logout', 'bns-login' ) ) );
-		$goto        = apply_filters( 'bns_login_goto', sprintf( __( 'Go to Dashboard', 'bns-login' ) ) );
-		$separator   = apply_filters( 'bns_login_separator', sprintf( __( ' &deg;&deg; ' ) ) );
-		$sep         = apply_filters( 'bns_login_sep', '<span class="bns-login-separator">' . $separator . '</span>' );
-		$login_url   = apply_filters( 'bns_login_url', home_url( '/wp-admin/' ) );
+		$login        = apply_filters( 'bns_login_here', sprintf( __( 'Log in here!', 'bns-login' ) ) );
+		$login_title  = esc_attr( $login );
+		$after_login  = apply_filters( 'bns_login_after_login', sprintf( __( 'You are logged in!', 'bns-login' ) ) );
+		$logout       = apply_filters( 'bns_login_logout', sprintf( __( 'Logout', 'bns-login' ) ) );
+		$logout_title = esc_attr( $logout );
+		$goto         = apply_filters( 'bns_login_goto', sprintf( __( 'Go to Dashboard', 'bns-login' ) ) );
+		$goto_title   = esc_attr( $goto );
+		$separator    = apply_filters( 'bns_login_separator', sprintf( __( ' &deg;&deg; ' ) ) );
+		$sep          = apply_filters( 'bns_login_sep', '<span class="bns-login-separator">' . $separator . '</span>' );
+		$login_url    = esc_url( apply_filters( 'bns_login_url', home_url( '/wp-admin/' ) ) );
+
+		/** @var bool $dashed_set - intended as boolean toggle to use dashicons instead of text */
+		$dashed_set = apply_filters( 'bns_login_dashed_set', false );
+		if ( $dashed_set ) {
+			$login       = apply_filters( 'bns_login_here', '<span class="dashicons dashicons-lock"></span>' );
+			$after_login = apply_filters( 'bns_login_after_login', '<span class="dashicons dashicons-visibility"></span>' );
+			$logout      = apply_filters( 'bns_login_logout', '<span class="dashicons dashicons-dismiss"></span>' );
+			$goto        = apply_filters( 'bns_login_goto', '<span class="dashicons dashicons-dashboard"></span>' );
+			$sep         = apply_filters( 'bns_login_sep', ' ' );
+		}
+		/** End if - use dashicons */
 
 		/** The real work gets done next ...  */
 		if ( is_user_logged_in() ) {
 			$output .= '<div id="bns-logged-in" class="bns-login">' . '<span class="bns-after-login">' . $after_login . '</span>' . $sep;
-			/** Multisite - logout returns to Multisite main domain page */
+			/** Multisite - logout returns to current site home page */
 			if ( is_multisite() ) {
 				$current_site = get_current_site();
-				/** @var $home_domain - constructed url */
-				$home_domain = 'http://' . $current_site->domain . $current_site->path;
-				$logout_url  = wp_logout_url( $home_domain );
+				$protocol     = is_ssl() ? 'https://' : 'http://';
+				$home_domain  = $protocol . $current_site->domain . $current_site->path;
+				$logout_url   = wp_logout_url( $home_domain );
 			} else {
 				$logout_url = wp_logout_url( home_url() );
 			}
 			/** End if - is multisite */
-			$output .= '<a class="bns-logout-url" href="' . $logout_url . '" title="' . $logout . '">' . $logout . '</a>' . $sep;
-			$output .= '<a class="bns-login-url" href="' . $login_url . '" title="' . $goto . '">' . $goto . '</a></div>';
+			$output .= '<a class="bns-logout-url" href="' . $logout_url . '" title="' . $logout_title . '">' . $logout . '</a>' . $sep;
+			$output .= '<a class="bns-login-url" href="' . $login_url . '" title="' . $goto_title . '">' . $goto . '</a></div>';
 		} else {
 			/** Display login message */
 			$output .= '<div id="bns-logged-out" class="bns-login">';
-			$output .= '<a class="bns-login-url" href="' . $login_url . '" title="' . $login . '">' . $login . '</a>';
+			$output .= '<a class="bns-login-url" href="' . $login_url . '" title="' . $login_title . '">' . $login . '</a>';
+
 			/** Show register link if new users allowed in site settings */
+			if ( $dashed_set ) {
+				add_filter( 'register', array(
+					$this,
+					'dashicons_register_link'
+				) );
+			}
 			$output .= wp_register( $sep, '', false );
+
 			$output .= '</div>';
 		}
 
@@ -250,7 +307,40 @@ class BNS_Login {
 
 		return $output;
 
-	} /** End function - bns login main */
+	}
+	/** End function - bns login main */
+
+
+	/**
+	 * Dashicons Register Link
+	 * Changes the `Register` test to a `key` icon
+	 *
+	 * @package BNS_Login
+	 * @since   2.4
+	 *
+	 * @uses    admin_url
+	 * @uses    apply_filters
+	 * @uses    esc_url
+	 * @uses    get_option
+	 * @uses    is_user_logged_in
+	 * @uses    wp_registration_url
+	 *
+	 * @return string
+	 */
+	function dashicons_register_link() {
+		if ( ! is_user_logged_in() ) {
+			if ( get_option( 'users_can_register' ) ) {
+				$link = apply_filters( 'bns_login_sep', ' ' ) . '<a href="' . esc_url( wp_registration_url() ) . '">' . '<span class="dashicons dashicons-admin-network"></span>' . '</a>';
+			} else {
+				$link = '';
+			}
+		} else {
+			$link = apply_filters( 'bns_login_sep', ' ' ) . '<a href="' . admin_url() . '">' . __( 'Site Admin' ) . '</a>';
+		}
+
+		return $link;
+	}
+	/** End function - dashicons register link */
 
 
 	/**
@@ -278,7 +368,8 @@ class BNS_Login {
 		/** Add empty hook after output */
 		do_action( 'bns_login_after_output' );
 
-	} /** End function - bns login output */
+	}
+	/** End function - bns login output */
 
 
 	/**
@@ -310,7 +401,8 @@ class BNS_Login {
 
 		return $credits;
 
-	} /** End function - jetpack infinite scroll compatibility */
+	}
+	/** End function - jetpack infinite scroll compatibility */
 
 
 	/**
@@ -390,7 +482,8 @@ class BNS_Login {
 		$plugin_data = get_plugin_data( __FILE__ );
 
 		return $plugin_data;
-	} /** End function - plugin data */
+	}
+	/** End function - plugin data */
 
 
 	/**
@@ -429,15 +522,12 @@ class BNS_Login {
 		return $links;
 
 	}
-
 	/** End function - plugin meta */
-
 
 
 }
 
 /** End class - BNS Login */
-
 
 /** @var $bns_login - new instance of the BNS Login class */
 $bns_login = new BNS_Login();
