@@ -3,7 +3,7 @@ Contributors: cais
 Donate link: http://buynowshop.com/
 Tags: login, dashboard, admin, footer, plugin-only, shortcode
 Requires at least: 3.8
-Tested up to: 4.0
+Tested up to: 4.1
 Stable tag: 2.4
 License: GNU General Public License v2
 License URI: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
